@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -15,10 +16,11 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
-});
-Route::get('/login', function () {
-    return view('login');
-});
-Route::get('/register', function () {
-    return view('register');
-});
+})->middleware('auth');
+Route::get('login', [\App\Http\Controllers\LoginController::class, 'show'])->name('login');
+Route::post('login', [\App\Http\Controllers\LoginController::class, 'login'])->name('login-submit');
+
+Route::get('register', [\App\Http\Controllers\RegisterController::class, 'show'])->name('register');
+Route::post('register', [\App\Http\Controllers\RegisterController::class, 'register'])->name('register-submit');
+Route::post('validate-email', [\App\Http\Controllers\RegisterController::class, 'validateEmail'])->name('register-validate-email');
+Route::get('email/verify/{id}', [\App\Http\Controllers\VerificationController::class, 'verify'])->name('verification.verify');

@@ -1,23 +1,20 @@
-<!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="h-full bg-white">
+@extends('_master')
 
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+@section('html-class', 'h-full bg-white')
+@section('body-class', 'antialiased h-full')
+@section('title', 'Login')
 
-    <title>How to Install Tailwind CSS 3 in Laravel 9 With Vite 3 - TechvBlogs</title>
-
-    @vite('resources/js/app.js')
-</head>
-
-<body class="antialiased h-full">
+@section('content')
+@include('_status')
 <div class="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
     <div class="sm:mx-auto sm:w-full sm:max-w-sm">
         <h2 class="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">Sign in to your account</h2>
     </div>
 
     <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+        @include('_errors')
         <form class="space-y-6" action="#" method="POST">
+            @csrf()
             <div>
                 <label for="email" class="block text-sm font-medium leading-6 text-gray-900">Email address</label>
                 <div class="mt-2">
@@ -48,6 +45,4 @@
         </p>
     </div>
 </div>
-</body>
-
-</html>
+@endsection
