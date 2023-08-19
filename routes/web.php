@@ -1,6 +1,12 @@
 <?php
 
+use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Route;
+
+use \App\Http\Controllers\IndexController;
+use \App\Http\Controllers\LoginController;
+use \App\Http\Controllers\RegisterController;
+use \App\Http\Controllers\VerificationController;
 
 
 /*
@@ -14,11 +20,19 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', [\App\Http\Controllers\IndexController::class, 'index'])->middleware('auth');
-Route::get('login', [\App\Http\Controllers\LoginController::class, 'show'])->name('login');
-Route::post('login', [\App\Http\Controllers\LoginController::class, 'login'])->name('login-submit');
+Route::get('/', [IndexController::class, 'index'])->middleware('auth');
 
-Route::get('register', [\App\Http\Controllers\RegisterController::class, 'show'])->name('register');
-Route::post('register', [\App\Http\Controllers\RegisterController::class, 'register'])->name('register-submit');
-Route::post('validate-email', [\App\Http\Controllers\RegisterController::class, 'validateEmail'])->name('register-validate-email');
-Route::get('email/verify/{id}', [\App\Http\Controllers\VerificationController::class, 'verify'])->name('verification.verify');
+Route::middleware('guest')->group(function (Router $router) {
+    $router->prefix('login')->group(function (Router $router) {
+        $router->get('', [LoginController::class, 'show'])->name('login');
+        $router->post('', [LoginController::class, 'login'])->name('login-submit');
+    });
+    $router->prefix('register')->group(function (Router $router) {
+        $router->get('register', [RegisterController::class, 'show'])->name('register');
+        $router->post('register', [RegisterController::class, 'register'])->name('register-submit');
+    });
+    $router->post('validate-email', [RegisterController::class, 'validateEmail'])->name('register-validate-email');
+    $router->get('email/verify/{id}', [VerificationController::class, 'verify'])->name('verification.verify');
+});
+
+Route::get('logout', [LoginController::class, 'logout'])->middleware('auth')->name('logout');

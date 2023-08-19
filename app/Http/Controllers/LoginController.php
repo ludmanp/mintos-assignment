@@ -14,7 +14,7 @@ class LoginController extends Controller
 
     public function show(): View
     {
-        return view('login');
+        return view('auth.login');
     }
 
     public function login(LoginFormRequest $request)
@@ -26,5 +26,11 @@ class LoginController extends Controller
         Auth::login($user);
 
         return redirect('/');
+    }
+
+    public function logout()
+    {
+        Auth::logout();
+        return redirect(route('login'));
     }
 }
