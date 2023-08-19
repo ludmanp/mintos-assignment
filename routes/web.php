@@ -28,11 +28,11 @@ Route::middleware('guest')->group(function (Router $router) {
         $router->post('', [LoginController::class, 'login'])->name('login-submit');
     });
     $router->prefix('register')->group(function (Router $router) {
-        $router->get('register', [RegisterController::class, 'show'])->name('register');
-        $router->post('register', [RegisterController::class, 'register'])->name('register-submit');
+        $router->get('', [RegisterController::class, 'show'])->name('register');
+        $router->post('', [RegisterController::class, 'register'])->name('register-submit');
     });
     $router->post('validate-email', [RegisterController::class, 'validateEmail'])->name('register-validate-email');
     $router->get('email/verify/{id}', [VerificationController::class, 'verify'])->name('verification.verify');
 });
 
-Route::get('logout', [LoginController::class, 'logout'])->middleware('auth')->name('logout');
+Route::post('logout', [LoginController::class, 'logout'])->middleware('auth')->name('logout');
