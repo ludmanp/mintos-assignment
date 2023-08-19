@@ -10,26 +10,30 @@ class RssReaderService
 {
     public function read(): array
     {
-        $xml = Cache::get($this->getCacheKey());
-        if(!$xml) {
-            $xml = $this->getXml();
-            Cache::put($this->getCacheKey(), $xml, config('rss.cache.length'));
-        }
-
-        $xmlObject = simplexml_load_string($xml, 'SimpleXMLElement', LIBXML_NOCDATA);
-        $jsonFormatData = json_encode($xmlObject);
-        $data = json_decode($jsonFormatData);
-
         $result = [];
-        foreach (array_slice(data_get($data, 'channel.item', []), 0, config('rss.count')) as $item)
-        {
-            $result[] = (new RssItemData($item));
+        try {
+            $xml = Cache::get($this->getCacheKey());
+            if (!$xml) {
+                $xml = $this->getXml();
+                Cache::put($this->getCacheKey(), $xml, config('rss.cache.length'));
+            }
+
+            $xmlObject = simplexml_load_string($xml, 'SimpleXMLElement', LIBXML_NOCDATA);
+            $jsonFormatData = json_encode($xmlObject);
+            $data = json_decode($jsonFormatData);
+
+            foreach (array_slice(data_get($data, 'channel.item', []), 0, config('rss.count')) as $item) {
+                $result[] = (new RssItemData($item));
+            }
+        } catch (\Exception $e) {
+            Log::error('RSS read error: ' . $e->getMessage());
         }
 
         return $result;
     }
 
-    protected function getXML() {
+    protected function getXML()
+    {
         $curl = curl_init();
 
         curl_setopt_array($curl, array(
@@ -48,7 +52,8 @@ class RssReaderService
         return $response;
     }
 
-    private function getCacheKey() {
+    private function getCacheKey()
+    {
         return 'rss::' . config('rss.url');
     }
 }

@@ -10,7 +10,6 @@ class IndexController extends Controller
 {
     public function index(RssReaderService $rssReaderService)
     {
-
         return view('index', ['items' => $rssReaderService->read()]);
     }
 }
