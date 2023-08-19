@@ -1,9 +1,9 @@
 <?php
 
 return [
-    'url' => 'https://www.delfi.lv/rss/?channel=delfi',
+    'url' => env('RSS_URL'),
     'cache' => [
-        'length' => 60,
+        'length' => env('RSS_CACHE_LENGTH', 60),
     ],
-    'count' => 20,
+    'count' => env('RSS_COUNT', 20),
 ];

@@ -21,7 +21,7 @@ class RssReaderService
         $data = json_decode($jsonFormatData);
 
         $result = [];
-        foreach (array_slice(data_get($data, 'channel.item', []), 0, config('rss.count', 20)) as $item)
+        foreach (array_slice(data_get($data, 'channel.item', []), 0, config('rss.count')) as $item)
         {
             $result[] = (new RssItemData($item));
         }
