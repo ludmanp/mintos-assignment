@@ -25,5 +25,9 @@ export const InitEmailValidation = () => {
           errorNotifications.innerHTML = errors.join('<br>');
         });
     });
+
+    if(emailInput.value) {
+      emailInput.dispatchEvent(new Event('change'));
+    }
   }
 }

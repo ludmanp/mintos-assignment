@@ -3,7 +3,7 @@
 ### Setup
 
 1. Clone repository
-2. Create `.env` file from `.env.example` and fill important values, specially DB connection and RSS configuration
+2. Create `.env` file from `.env.example` and fill important values, specially DB connection, mail connection, and RSS configuration
 ```
 RSS_URL=https://www.delfi.lv/rss/?channel=delfi
 RSS_CACHE_LENGTH=60
