@@ -11,7 +11,7 @@ class ValidateEmailFromRequest extends FormRequest
     public function rules()
     {
         return [
-            'email' => 'required|email:rfc,dns|max:255',
+            'email' => 'required',
         ];
     }
 }

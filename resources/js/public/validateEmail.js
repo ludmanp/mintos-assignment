@@ -4,10 +4,22 @@ export const InitEmailValidation = () => {
   if(emailInput) {
     const form = emailInput.closest('form');
     const button = form.querySelector('button[type=submit]');
-    emailInput.addEventListener('change', () => {
+    let controller = new AbortController();
+
+    emailInput.addEventListener('keyup', () => {
+
+      if(!emailInput.value) {
+        errorNotifications.classList.add('hidden');
+        button.disabled = true;
+        return;
+      }
+      controller.abort();
+      controller = new AbortController();
       axios
         .post("/validate-email", {
           email: emailInput.value
+        }, {
+          signal: controller.signal
         })
         .then((response) => {
           errorNotifications.classList.add('hidden');
@@ -16,9 +28,11 @@ export const InitEmailValidation = () => {
         .catch((error) => {
           button.disabled = true;
           let errors = [];
-          for(var key in error.response.data.errors) {
-            for(var value of error.response.data.errors[key]) {
-              errors.push(value);
+          if(error.response?.data?.errors) {
+            for (var key in error.response.data.errors) {
+              for (var value of error.response.data.errors[key]) {
+                errors.push(value);
+              }
             }
           }
           errorNotifications.classList.remove('hidden');
@@ -27,7 +41,7 @@ export const InitEmailValidation = () => {
     });
 
     if(emailInput.value) {
-      emailInput.dispatchEvent(new Event('change'));
+      emailInput.dispatchEvent(new Event('keyup'));
     }
   }
 }
